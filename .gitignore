@@ -1,0 +1,21 @@
+# executed notebook snapshots and run logs
+*_run20*.ipynb
+*.log
+quick.log
+
+# Julia
+Manifest.toml
+*.jl.cov
+*.jl.mem
+.julia/
+
+# Python
+__pycache__/
+*.pyc
+
+# generated figures and archives
+GRRRfig_*.pdf
+*.zip
+
+# macOS
+.DS_Store

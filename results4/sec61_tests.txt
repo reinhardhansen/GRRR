@@ -1,0 +1,79 @@
+four contracts, 1986-01 to 2024-04, N = 460, numeraire F1
+threads: 10;  BLAS threads: 1
+
+augmented Dickey-Fuller, MacKinnon p-values, lag by AIC
+series                ADF        p  lags
+log F1              -1.65   0.4572     4
+log F2              -1.58   0.4958     4
+log F3              -1.69   0.4381     3
+log F4              -1.63   0.4650     3
+log F2 - log F1     -7.77   0.0000     2
+log F3 - log F1     -6.97   0.0000     2
+log F4 - log F1     -8.41   0.0000     0
+for reference, differences:
+d log F1           -11.61   0.0000     3
+d log F2           -11.24   0.0000     3
+d log F3           -12.56   0.0000     2
+d log F4           -12.51   0.0000     2
+spread p-values in full:
+    log F2 - log F1   stat   -7.7695   p 9.002e-12
+    log F3 - log F1   stat   -6.9687   p 8.780e-10
+    log F4 - log F1   stat   -8.4126   p 2.084e-13
+
+Johansen trace test on the GRRR design, k = 2, T = 458, 1986-03-01 .. 2024-04-01
+  Z has 9 columns: four lagged differences, a constant, four Fourier terms
+  Osterwald-Lenum quantiles, statsmodels coint_tables c_sjt(p - r, 0)
+  eigenvalues: 0.38902118 0.19153314 0.09148355 0.00355689
+    r <= 0: trace   368.60   90%   44.49   95%   47.85   99%   54.68   reject
+    r <= 1: trace   142.95   90%   27.07   95%   29.80   99%   35.46   reject
+    r <= 2: trace    45.57   90%   13.43   95%   15.49   99%   19.93   reject
+    r <= 3: trace     1.63   90%    2.71   95%    3.84   99%    6.63   do not reject
+
+recursive wild bootstrap rank test, B = 999, Rademacher weights
+  Cavaliere, Rahbek and Taylor (2014); the null is imposed on the DGP
+      H0     trace    boot p   boot 95%
+  r <= 0    368.60    0.0010      68.78   (1 s)
+  r <= 1    142.95    0.0010      35.09   (1 s)
+  r <= 2     45.57    0.0010      20.17   (1 s)
+  r <= 3      1.63    0.5180       7.95   (2 s)
+
+lag length on a common sample of 454 observations, fourier2 seasonals
+  k       loglik         AIC         BIC          HQ   LB(10) p
+  1      5965.40    -11838.8    -11649.4    -11764.2      0.001
+  2      6012.81    -11901.6    -11646.3    -11801.0      0.495
+  3      6024.97    -11893.9    -11572.7    -11767.4      0.396
+  4      6034.30    -11880.6    -11493.5    -11728.1      0.501
+  5      6046.30    -11872.6    -11419.6    -11694.1      0.841
+
+seasonal terms at k = 2, the same 454 observations
+terms         cols       loglik         AIC         BIC
+none             0      5993.97    -11895.9    -11706.5
+quarter          3      6015.75    -11915.5    -11676.6
+fourier1         2      6002.45    -11896.9    -11674.5
+fourier2         4      6012.81    -11901.6    -11646.3
+fourier3         6      6024.67    -11909.3    -11621.1
+month           11      6043.41    -11906.8    -11536.2
+LR fourier2 against none, 16 df:  37.679  p 0.0017   (454 rows, as above)
+LR fourier2 against none, 16 df:  35.030  p 0.0039   (458 rows, GRRR sample)
+
+seasonal grid: does the seasonal block move the test of b1 = b2 = b3 = 1?
+  the scale fits take a few minutes; GRID=0 skips this block
+  none     regime  Z  5  free   6371.2577  b=1   6365.9640  LR  10.587  p 0.0142     5s
+  none     scale   Z  5  free   6392.0162  b=1   6390.8176  LR   2.397  p 0.4942     6s
+  quarter  regime  Z  8  free   6388.0730  b=1   6382.2580  LR  11.630  p 0.0088     8s
+  quarter  scale   Z  8  free   6400.0638  b=1   6398.8489  LR   2.430  p 0.4881    10s
+  fourier2 regime  Z  9  free   6402.0529  b=1   6396.2563  LR  11.593  p 0.0089    13s
+  fourier2 scale   Z  9  free   6406.4339  b=1   6405.2891  LR   2.290  p 0.5145    14s
+  fourier3 regime  Z 11  free   6409.1043  b=1   6403.3741  LR  11.460  p 0.0095    17s
+  fourier3 scale   Z 11  free   6418.3049  b=1   6417.2274  LR   2.155  p 0.5409    19s
+  month    regime  Z 16  free   6427.3805  b=1   6421.8957  LR  10.970  p 0.0119    23s
+  month    scale   Z 16  free   6438.6653  b=1   6437.4782  LR   2.374  p 0.4985    26s
+
+chi-squared(3) p-value of b1 = b2 = b3 = 1
+Sigma specification             none   quarter  fourier2  fourier3     month   spread
+regime (2008:9, 2020:3)       0.0142    0.0088    0.0089    0.0095    0.0119   0.0054
+scale, proxy in levels        0.4942    0.4881    0.5145    0.5409    0.4985   0.0528
+smallest gap between the two rows: 0.4793
+regime rejects at 5% in 5 of 5 blocks; scale in 0 of 5
+
+finished at 01:19:46
