@@ -1,7 +1,6 @@
 # Generalized Reduced Rank Regression: replication code
 
-Replication material for P. R. Hansen, *Generalized Reduced Rank Regression*,
-Econometric Reviews (2026). Julia code and the assembled crude-oil data set.
+Replication material for P. R. Hansen, *Generalized Reduced Rank Regression*. Julia code and the assembled crude-oil data set.
 Install the packages once:
 
 ```
